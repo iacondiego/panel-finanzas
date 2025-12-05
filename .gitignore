@@ -63,3 +63,6 @@ Thumbs.db
 # Supabase
 supabase/.branches
 supabase/.temp
+
+# Secrets
+make-diego-654f517030cf.json

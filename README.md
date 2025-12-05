@@ -23,7 +23,7 @@ npm install
 Crea un archivo `.env.local` en la raíz del proyecto:
 
 ```env
-NEXT_PUBLIC_GOOGLE_API_KEY=tu_api_key_aqui
+NEXT_PUBLIC_GOOGLE_API_KEY=AIzaSyBq4DsYmidBKhOz5a_tdpEpOjD8EoBpV-w
 NEXT_PUBLIC_SPREADSHEET_ID=tu_spreadsheet_id_aqui
 NEXT_PUBLIC_SHEET_NAME=Hoja 1
 NEXT_PUBLIC_DATA_RANGE=A:F

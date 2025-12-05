@@ -3,7 +3,8 @@ import { google } from 'googleapis';
 
 const SPREADSHEET_ID = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
 const SHEET_NAME = process.env.NEXT_PUBLIC_SHEET_NAME || 'Hoja 1';
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+const SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
 export async function POST(request: NextRequest) {
     try {
@@ -18,8 +19,28 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Validar credenciales
+        if (!SERVICE_ACCOUNT_EMAIL || !PRIVATE_KEY || !SPREADSHEET_ID) {
+            console.error('Missing credentials:', {
+                hasEmail: !!SERVICE_ACCOUNT_EMAIL,
+                hasKey: !!PRIVATE_KEY,
+                hasSpreadsheetId: !!SPREADSHEET_ID,
+            });
+            return NextResponse.json(
+                { error: 'Configuración de Google Sheets incompleta' },
+                { status: 500 }
+            );
+        }
+
+        // Configurar autenticación con Service Account
+        const auth = new google.auth.JWT({
+            email: SERVICE_ACCOUNT_EMAIL,
+            key: PRIVATE_KEY,
+            scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+        });
+
         // Configurar Google Sheets API
-        const sheets = google.sheets({ version: 'v4', auth: API_KEY });
+        const sheets = google.sheets({ version: 'v4', auth });
 
         // Preparar fila para agregar
         const values = [
