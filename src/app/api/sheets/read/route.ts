@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     } catch (error) {
         console.error('Error reading transactions:', error);
         return NextResponse.json(
-            { error: 'Error al leer las transacciones' },
+            { error: `Error al leer: ${error instanceof Error ? error.message : 'Error desconocido'}` },
             { status: 500 }
         );
     }
