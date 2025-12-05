@@ -29,20 +29,46 @@ export function CategoryChart({ selectedMonth }: CategoryChartProps) {
 
         const total = Array.from(categoryMap.values()).reduce((sum, val) => sum + val, 0);
 
+        // Paleta de colores extendida para categorías desconocidas
+        const PALETTE = [
+            '#006FEE', // Electric Blue
+            '#F54180', // Vivid Pink/Magenta
+            '#17C964', // Vivid Green
+            '#F5A524', // Vivid Orange
+            '#9333EA', // Vivid Purple
+            '#06B6D4', // Cyan
+            '#E11D48', // Rose
+            '#FBBF24', // Amber
+        ];
+
         const CATEGORY_COLORS: Record<string, string> = {
-            'Publicidad': '#3b82f6',
-            'Agente': '#8b5cf6',
-            'Software': '#10b981',
-            'Servicios': '#f59e0b',
+            'Publicidad': '#006FEE',
+            'Agente IA': '#F54180',
+            'Agente': '#F54180',
+            'Software': '#17C964',
+            'Servicios': '#F5A524',
+            'Servidores': '#9333EA',
+            'Freelancers': '#06B6D4',
         };
 
+        let unknownCount = 0;
+
         return Array.from(categoryMap.entries())
-            .map(([categoria, amount]) => ({
-                name: categoria,
-                value: amount,
-                percentage: total > 0 ? (amount / total) * 100 : 0,
-                color: CATEGORY_COLORS[categoria] || '#6b7280',
-            }))
+            .map(([categoria, amount]) => {
+                let color = CATEGORY_COLORS[categoria];
+                if (!color) {
+                    // Asignar color de la paleta cíclicamente
+                    color = PALETTE[(Object.keys(CATEGORY_COLORS).length + unknownCount) % PALETTE.length];
+                    unknownCount++;
+                }
+
+                return {
+                    name: categoria,
+                    value: amount,
+                    percentage: total > 0 ? (amount / total) * 100 : 0,
+                    color: color,
+                };
+            })
             .sort((a, b) => b.value - a.value);
     }, [transactions, selectedMonth]);
 

@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui/Card';
 import { useSheetsStore } from '@/features/sheets/store/sheets-store';
 import { formatCurrency } from '@/shared/utils/formatters';
@@ -99,54 +99,42 @@ export function EvolutionChart({ selectedMonth }: EvolutionChartProps) {
                 </CardHeader>
                 <CardContent>
                     <ResponsiveContainer width="100%" height={400}>
-                        <AreaChart data={chartData}>
-                            <defs>
-                                <linearGradient id="colorIngresos" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                                </linearGradient>
-                                <linearGradient id="colorGastos" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3} />
-                                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
-                                </linearGradient>
-                            </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                        <BarChart data={chartData}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} vertical={false} />
                             <XAxis
                                 dataKey="fecha"
                                 stroke="#9ca3af"
                                 style={{ fontSize: '12px' }}
+                                axisLine={false}
+                                tickLine={false}
                             />
                             <YAxis
                                 stroke="#9ca3af"
                                 style={{ fontSize: '12px' }}
                                 tickFormatter={(value) => `$${value / 1000}K`}
+                                axisLine={false}
+                                tickLine={false}
                             />
-                            <Tooltip content={<CustomTooltip />} />
+                            <Tooltip content={<CustomTooltip />} cursor={{ fill: '#ffffff10' }} />
                             <Legend
                                 wrapperStyle={{ paddingTop: '20px' }}
                                 iconType="circle"
                             />
-                            <Area
-                                type="monotone"
+                            <Bar
                                 dataKey="ingresos"
                                 name="Ingresos"
-                                stroke="#10b981"
-                                strokeWidth={2}
-                                fillOpacity={1}
-                                fill="url(#colorIngresos)"
-                                animationDuration={1000}
+                                fill="#17C964"
+                                radius={[4, 4, 0, 0]}
+                                maxBarSize={50}
                             />
-                            <Area
-                                type="monotone"
+                            <Bar
                                 dataKey="gastos"
                                 name="Gastos"
-                                stroke="#ef4444"
-                                strokeWidth={2}
-                                fillOpacity={1}
-                                fill="url(#colorGastos)"
-                                animationDuration={1000}
+                                fill="#F31260"
+                                radius={[4, 4, 0, 0]}
+                                maxBarSize={50}
                             />
-                        </AreaChart>
+                        </BarChart>
                     </ResponsiveContainer>
                 </CardContent>
             </Card>

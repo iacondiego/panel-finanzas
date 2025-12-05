@@ -8,11 +8,12 @@ import { EvolutionChart } from '@/features/dashboard/components/EvolutionChart';
 import { CategoryChart } from '@/features/dashboard/components/CategoryChart';
 import { TransactionsTable } from '@/features/dashboard/components/TransactionsTable';
 import { MonthFilter } from '@/features/dashboard/components/MonthFilter';
+import { AiInsights } from '@/features/dashboard/components/AiInsights';
+import { ScenarioSimulator } from '@/features/dashboard/components/ScenarioSimulator';
 import { AddTransactionForm } from '@/features/dashboard/components/AddTransactionForm';
 import { RefreshCw, Wifi, WifiOff, TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/shared/utils/cn';
-import { format } from 'date-fns';
 
 export default function Home() {
     const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
@@ -126,10 +127,14 @@ export default function Home() {
                     <>
                         <MetricsCards selectedMonth={selectedMonth} />
 
+                        {/* Charts Area */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <EvolutionChart selectedMonth={selectedMonth} />
                             <CategoryChart selectedMonth={selectedMonth} />
                         </div>
+
+                        <AiInsights />
+                        <ScenarioSimulator />
 
                         <TransactionsTable selectedMonth={selectedMonth} />
                     </>

@@ -1,7 +1,6 @@
 import { Transaction, TransactionType } from '../types';
 import { parse } from 'date-fns';
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
 const SPREADSHEET_ID = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
 const SHEET_NAME = process.env.NEXT_PUBLIC_SHEET_NAME || 'Hoja 1';
 const DATA_RANGE = process.env.NEXT_PUBLIC_DATA_RANGE || 'A:F';
@@ -15,19 +14,13 @@ interface SheetRow {
     descripcionAdicional?: string;
 }
 
-export class SheetsService {
-    private baseUrl = 'https://sheets.googleapis.com/v4/spreadsheets';
 
+export class SheetsService {
     /**
-     * Obtiene los datos de Google Sheets
+     * Obtiene los datos de Google Sheets (a través del proxy API)
      */
     async fetchTransactions(): Promise<Transaction[]> {
-        if (!API_KEY || !SPREADSHEET_ID) {
-            throw new Error('Google Sheets API credentials not configured');
-        }
-
-        const range = `${SHEET_NAME}!${DATA_RANGE}`;
-        const url = `${this.baseUrl}/${SPREADSHEET_ID}/values/${range}?key=${API_KEY}`;
+        const url = '/api/sheets/read';
 
         try {
             const response = await fetch(url, {
@@ -38,7 +31,8 @@ export class SheetsService {
             });
 
             if (!response.ok) {
-                throw new Error(`Google Sheets API error: ${response.statusText}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `Error al obtener datos: ${response.statusText}`);
             }
 
             const data = await response.json();
