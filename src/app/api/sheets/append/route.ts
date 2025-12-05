@@ -4,7 +4,10 @@ import { google } from 'googleapis';
 const SPREADSHEET_ID = process.env.NEXT_PUBLIC_SPREADSHEET_ID;
 const SHEET_NAME = process.env.NEXT_PUBLIC_SHEET_NAME || 'Hoja 1';
 const SERVICE_ACCOUNT_EMAIL = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
+// Sanitize private key: remove surrounding quotes and unescape newlines
+const PRIVATE_KEY = process.env.GOOGLE_PRIVATE_KEY
+    ?.replace(/^"|"$/g, '') // Remove quotes at start/end
+    ?.replace(/\\n/g, '\n'); // Unescape newlines
 
 export async function POST(request: NextRequest) {
     try {
