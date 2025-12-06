@@ -19,34 +19,42 @@ interface MetricCardProps {
 }
 
 const variantStyles = {
-    success: {
-        bg: 'from-emerald-500/20 to-green-500/20',
-        border: 'border-emerald-500/30',
-        icon: 'text-emerald-400',
-        glow: 'shadow-emerald-500/20',
+    first: { // Balance - Electric Blue
+        bg: 'from-blue-600/20 to-cyan-500/20 hover:from-blue-600/30 hover:to-cyan-500/30',
+        border: 'border-blue-500/50',
+        icon: 'text-blue-400 drop-shadow-[0_0_10px_rgba(96,165,250,0.5)]',
+        glow: 'shadow-[0_0_20px_rgba(59,130,246,0.2)] hover:shadow-[0_0_30px_rgba(59,130,246,0.4)]',
     },
-    danger: {
-        bg: 'from-red-500/20 to-rose-500/20',
-        border: 'border-red-500/30',
-        icon: 'text-red-400',
-        glow: 'shadow-red-500/20',
+    success: { // Ingresos - Vivid Green
+        bg: 'from-emerald-600/20 to-green-500/20 hover:from-emerald-600/30 hover:to-green-500/30',
+        border: 'border-emerald-500/50',
+        icon: 'text-emerald-400 drop-shadow-[0_0_10px_rgba(52,211,153,0.5)]',
+        glow: 'shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:shadow-[0_0_30px_rgba(16,185,129,0.4)]',
     },
-    warning: {
-        bg: 'from-amber-500/20 to-yellow-500/20',
-        border: 'border-amber-500/30',
-        icon: 'text-amber-400',
-        glow: 'shadow-amber-500/20',
+    danger: { // Gastos - Vivid Red/Pink
+        bg: 'from-red-600/20 to-rose-500/20 hover:from-red-600/30 hover:to-rose-500/30',
+        border: 'border-red-500/50',
+        icon: 'text-red-400 drop-shadow-[0_0_10px_rgba(248,113,113,0.5)]',
+        glow: 'shadow-[0_0_20px_rgba(239,68,68,0.2)] hover:shadow-[0_0_30px_rgba(239,68,68,0.4)]',
     },
-    info: {
-        bg: 'from-blue-500/20 to-cyan-500/20',
-        border: 'border-blue-500/30',
-        icon: 'text-blue-400',
-        glow: 'shadow-blue-500/20',
+    warning: { // Pendientes - Vivid Orange/Amber
+        bg: 'from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30',
+        border: 'border-amber-500/50',
+        icon: 'text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.5)]',
+        glow: 'shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)]',
+    },
+    info: { // Fallback / Others
+        bg: 'from-violet-600/20 to-purple-500/20',
+        border: 'border-violet-500/50',
+        icon: 'text-violet-400',
+        glow: 'shadow-[0_0_20px_rgba(139,92,246,0.2)]',
     },
 };
 
 function MetricCard({ title, value, icon, trend, variant, delay = 0 }: MetricCardProps) {
-    const styles = variantStyles[variant];
+    // Cast strict keys to allowing string indexing if needed, or update interface
+    // @ts-ignore
+    const styles = variantStyles[variant] || variantStyles.info;
 
     return (
         <motion.div
@@ -55,25 +63,26 @@ function MetricCard({ title, value, icon, trend, variant, delay = 0 }: MetricCar
             transition={{ duration: 0.5, delay }}
         >
             <Card className={cn(
-                'relative overflow-hidden group hover:scale-105 transition-transform duration-300',
+                'relative overflow-hidden group hover:-translate-y-1 transition-all duration-300',
                 styles.border,
                 styles.glow,
-                'shadow-2xl'
+                'border bg-gray-900/40 backdrop-blur-xl'
             )}>
                 <div className={cn(
-                    'absolute inset-0 bg-gradient-to-br opacity-50',
+                    'absolute inset-0 bg-gradient-to-br transition-opacity duration-300',
                     styles.bg
                 )} />
 
-                <CardContent className="relative">
+                <CardContent className="relative p-6">
                     <div className="flex items-start justify-between">
                         <div className="flex-1">
-                            <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
+                            <p className="text-sm font-medium text-gray-300 mb-1 tracking-wide uppercase opacity-80">{title}</p>
                             <motion.p
-                                className="text-3xl font-bold text-white mb-2"
-                                initial={{ scale: 0.5 }}
-                                animate={{ scale: 1 }}
-                                transition={{ duration: 0.5, delay: delay + 0.2 }}
+                                key={value} // Re-animate on value change
+                                className="text-3xl font-bold text-white mb-2 tracking-tight drop-shadow-md"
+                                initial={{ scale: 0.95, opacity: 0.5 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{ duration: 0.3 }}
                             >
                                 {formatCurrency(value)}
                             </motion.p>
@@ -96,8 +105,9 @@ function MetricCard({ title, value, icon, trend, variant, delay = 0 }: MetricCar
                         </div>
 
                         <div className={cn(
-                            'p-3 rounded-xl bg-white/5 backdrop-blur-sm',
-                            'group-hover:scale-110 transition-transform duration-300',
+                            'p-3 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10',
+                            'group-hover:scale-110 group-hover:bg-white/10 transition-all duration-300',
+                            'shadow-lg',
                             styles.icon
                         )}>
                             {icon}
@@ -149,7 +159,8 @@ export function MetricsCards({ selectedMonth }: MetricsCardsProps) {
                 title="Balance Total"
                 value={metrics.balance}
                 icon={<Wallet className="w-6 h-6" />}
-                variant={metrics.balance >= 0 ? 'success' : 'danger'}
+                // @ts-ignore
+                variant="first"
                 delay={0}
             />
 

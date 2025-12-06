@@ -23,8 +23,16 @@ export function CategoryChart({ selectedMonth }: CategoryChartProps) {
         const categoryMap = new Map<string, number>();
 
         filteredTransactions.forEach(transaction => {
-            const current = categoryMap.get(transaction.categoria) || 0;
-            categoryMap.set(transaction.categoria, current + Math.abs(transaction.importe));
+            // Normalizar categorías legacy
+            let categoria = transaction.categoria;
+            if (categoria === 'Agente') {
+                categoria = 'Agentes de IA';
+            } else if (categoria === 'Agente IA') { // Ensure consistency if user types this variant
+                categoria = 'Agentes de IA';
+            }
+
+            const current = categoryMap.get(categoria) || 0;
+            categoryMap.set(categoria, current + Math.abs(transaction.importe));
         });
 
         const total = Array.from(categoryMap.values()).reduce((sum, val) => sum + val, 0);
