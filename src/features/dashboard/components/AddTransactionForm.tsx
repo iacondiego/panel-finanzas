@@ -28,10 +28,12 @@ export function AddTransactionForm({ onSuccess }: AddTransactionFormProps) {
     });
 
     const categorias: Category[] = [
+        'Agentes de IA',
         'Publicidad',
-        'Agente',
         'Software',
-        'Servicios',
+        'Servidores',
+        'Hobbie',
+        'Mentoria',
     ];
 
     const handleSubmit = async (e: React.FormEvent) => {

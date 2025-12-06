@@ -43,13 +43,13 @@ export function CategoryChart({ selectedMonth }: CategoryChartProps) {
         ];
 
         const CATEGORY_COLORS: Record<string, string> = {
-            'Publicidad': '#006FEE', // Blue
-            'Agente IA': '#F54180',  // Pink/Magenta
-            'Agente': '#9333EA',     // Purple (Distinto de Agente IA)
-            'Software': '#17C964',   // Green
-            'Servicios': '#F5A524',  // Orange
-            'Servidores': '#06B6D4', // Cyan
-            'Freelancers': '#E11D48',// Rose
+            'Agentes de IA': '#F54180', // Vivid Pink/Magenta (Principal)
+            'Publicidad': '#006FEE',    // Electric Blue
+            'Software': '#17C964',      // Vivid Green
+            'Servidores': '#9333EA',    // Vivid Purple
+            'Hobbie': '#F5A524',        // Vivid Orange
+            'Mentoria': '#06B6D4',      // Cyan
+            'Agente': '#F54180',        // Legacy capability
         };
 
         let unknownCount = 0;
