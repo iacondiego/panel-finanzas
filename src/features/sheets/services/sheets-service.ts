@@ -100,13 +100,15 @@ export class SheetsService {
     }
 
     /**
-     * Parsea un booleano desde checkbox de Google Sheets
+     * Parsea el estado de pago desde el texto de Google Sheets
+     * Retorna true si es "Pagado", false si es "Pendiente" u otro
      */
     private parseBoolean(value: string): boolean {
         if (!value) return false;
 
         const normalized = value.toString().toLowerCase().trim();
-        return normalized === 'true' ||
+        return normalized === 'pagado' ||
+            normalized === 'true' ||
             normalized === 'verdadero' ||
             normalized === '1' ||
             normalized === 'sí' ||

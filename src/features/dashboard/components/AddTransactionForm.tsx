@@ -54,7 +54,7 @@ export function AddTransactionForm({ onSuccess }: AddTransactionFormProps) {
                     tipo: formData.tipo,
                     categoria: formData.categoria,
                     importe: parseFloat(formData.importe),
-                    estadoPago: formData.estadoPago,
+                    estadoPago: formData.estadoPago ? 'Pagado' : 'Pendiente',
                     descripcionAdicional: formData.descripcionAdicional,
                 }),
             });

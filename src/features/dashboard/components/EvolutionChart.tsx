@@ -100,6 +100,16 @@ export function EvolutionChart({ selectedMonth }: EvolutionChartProps) {
                 <CardContent>
                     <ResponsiveContainer width="100%" height={400}>
                         <BarChart data={chartData}>
+                            <defs>
+                                <linearGradient id="ingresosGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#17C964" stopOpacity={1} />
+                                    <stop offset="100%" stopColor="#17C964" stopOpacity={0.6} />
+                                </linearGradient>
+                                <linearGradient id="gastosGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stopColor="#F31260" stopOpacity={1} />
+                                    <stop offset="100%" stopColor="#F31260" stopOpacity={0.6} />
+                                </linearGradient>
+                            </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} vertical={false} />
                             <XAxis
                                 dataKey="fecha"
@@ -123,14 +133,14 @@ export function EvolutionChart({ selectedMonth }: EvolutionChartProps) {
                             <Bar
                                 dataKey="ingresos"
                                 name="Ingresos"
-                                fill="#17C964"
+                                fill="url(#ingresosGradient)"
                                 radius={[4, 4, 0, 0]}
                                 maxBarSize={50}
                             />
                             <Bar
                                 dataKey="gastos"
                                 name="Gastos"
-                                fill="#F31260"
+                                fill="url(#gastosGradient)"
                                 radius={[4, 4, 0, 0]}
                                 maxBarSize={50}
                             />

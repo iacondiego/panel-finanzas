@@ -29,26 +29,27 @@ export function CategoryChart({ selectedMonth }: CategoryChartProps) {
 
         const total = Array.from(categoryMap.values()).reduce((sum, val) => sum + val, 0);
 
-        // Paleta de colores extendida para categorías desconocidas
+        // Paleta de colores extendida y profesional (Neon/Vivid)
         const PALETTE = [
             '#006FEE', // Electric Blue
-            '#F54180', // Vivid Pink/Magenta
+            '#F54180', // Vivid Pink
             '#17C964', // Vivid Green
             '#F5A524', // Vivid Orange
             '#9333EA', // Vivid Purple
             '#06B6D4', // Cyan
             '#E11D48', // Rose
+            '#7828C8', // Deep Violet
             '#FBBF24', // Amber
         ];
 
         const CATEGORY_COLORS: Record<string, string> = {
-            'Publicidad': '#006FEE',
-            'Agente IA': '#F54180',
-            'Agente': '#F54180',
-            'Software': '#17C964',
-            'Servicios': '#F5A524',
-            'Servidores': '#9333EA',
-            'Freelancers': '#06B6D4',
+            'Publicidad': '#006FEE', // Blue
+            'Agente IA': '#F54180',  // Pink/Magenta
+            'Agente': '#9333EA',     // Purple (Distinto de Agente IA)
+            'Software': '#17C964',   // Green
+            'Servicios': '#F5A524',  // Orange
+            'Servidores': '#06B6D4', // Cyan
+            'Freelancers': '#E11D48',// Rose
         };
 
         let unknownCount = 0;
@@ -57,8 +58,16 @@ export function CategoryChart({ selectedMonth }: CategoryChartProps) {
             .map(([categoria, amount]) => {
                 let color = CATEGORY_COLORS[categoria];
                 if (!color) {
-                    // Asignar color de la paleta cíclicamente
-                    color = PALETTE[(Object.keys(CATEGORY_COLORS).length + unknownCount) % PALETTE.length];
+                    // Asignar color de la paleta cíclicamente, saltando los que ya se usaron explícitamente si es posible
+                    const usedColors = Object.values(CATEGORY_COLORS);
+                    const availableColors = PALETTE.filter(c => !usedColors.includes(c));
+
+                    if (availableColors.length > 0 && unknownCount < availableColors.length) {
+                        color = availableColors[unknownCount];
+                    } else {
+                        // Fallback al ciclo normal si se acaban los únicos
+                        color = PALETTE[unknownCount % PALETTE.length];
+                    }
                     unknownCount++;
                 }
 
